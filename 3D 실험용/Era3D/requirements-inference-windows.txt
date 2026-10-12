@@ -1,0 +1,15 @@
+# Minimal dependencies for Era3D multi-view image inference on Windows.
+# Install CUDA-enabled torch, torchvision, and xformers separately from the
+# official PyTorch cu118 index before installing this file.
+numpy<2
+diffusers==0.26.0
+transformers==4.37.2
+accelerate==0.21.0
+huggingface_hub==0.25.2
+omegaconf==2.2.3
+einops
+rembg==2.0.57
+opencv-python-headless==4.10.0.84
+icecream
+Pillow<11
+tqdm

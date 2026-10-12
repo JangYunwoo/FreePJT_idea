@@ -1,0 +1,13 @@
+{
+  "description": "합성 주문 데이터. 실제 고객 데이터가 아닙니다.",
+  "injected_anomaly_ids": [
+    "P-2018",
+    "P-2034",
+    "P-2150",
+    "P-2378",
+    "P-2521"
+  ],
+  "blank_membership_rows": 10,
+  "duplicate_rows": 1,
+  "note": "비지도 이상탐지 결과와 주입한 예외 행은 반드시 일치하지 않습니다."
+}

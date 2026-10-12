@@ -1,0 +1,12 @@
+{
+  "description": "합성 주문 데이터. 실제 고객 데이터가 아닙니다.",
+  "injected_anomaly_ids": [
+    "ORD-0058",
+    "ORD-0123",
+    "ORD-0290",
+    "ORD-0305"
+  ],
+  "blank_region_rows": 8,
+  "duplicate_rows": 1,
+  "note": "비지도 이상탐지의 결과가 주입 정답과 반드시 일치하는 것은 아닙니다."
+}

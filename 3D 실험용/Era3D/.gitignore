@@ -1,0 +1,31 @@
+slurm_log/
+mv_res/
+output/
+**/__pycache__/ 
+legacy/
+evaluate/
+slurm/
+instant-nsr-pl/runs/
+instant-nsr-pl/recon/
+sam_pt/
+MacLab-Era3D-512-6view/
+venv/
+
+# data
+data_cleaning/
+blender/container.sh
+
+# Local experiments and notebook caches
+test_inputs/
+.ipynb_checkpoints/
+*.log
+
+# Downloaded or trained model weights
+*.ckpt
+*.safetensors
+*.pth
+*.bin
+*.pt
+
+# These prompt embeddings are part of Era3D and required for inference.
+!mvdiffusion/data/fixed_prompt_embeds_6view/*.pt

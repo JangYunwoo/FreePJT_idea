@@ -1,0 +1,47 @@
+# Python virtual environments and caches
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editors, notebooks, and OS files
+.vscode/
+.idea/
+.ipynb_checkpoints/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Era3D downloaded weights, generated images, and private test inputs
+3D 실험용/Era3D/MacLab-Era3D-512-6view/
+3D 실험용/Era3D/mv_res/
+3D 실험용/Era3D/test_inputs/

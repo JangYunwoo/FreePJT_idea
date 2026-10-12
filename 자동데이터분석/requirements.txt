@@ -1,0 +1,8 @@
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.9,<1
+pandas>=2.2,<3
+duckdb>=1.1,<2
+pyod>=3,<4
+fg-data-profiling>=4.20,<5
+
