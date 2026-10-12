@@ -22,3 +22,13 @@
 ```
 
 `color_right_masked.png`, `color_back_masked.png` 등이 결과 이미지입니다. `venv/`, 모델 가중치, `mv_res/`는 Git에서 제외됩니다. 실제 서비스를 공개하거나 재배포하기 전에는 원본 GitHub 코드의 AGPL-3.0 조건과 모델 저장소의 별도 라이선스 표기를 함께 확인해야 합니다.
+
+## CharacterGen
+
+`CharacterGen/`에는 [공식 GitHub 저장소](https://github.com/zjp-shadow/CharacterGen)의 소스 코드를 가져왔고, 로컬 테스트용 `CharacterGen_test.ipynb`를 추가했습니다. 현재 목표는 **정면 PNG 한 장에서 정면·오른쪽·후면·왼쪽 PNG를 생성**하는 것입니다. 3D 메시 생성이나 리깅은 이번 이미지 실험 범위가 아닙니다.
+
+2D 모델 체크포인트는 로컬에 받았지만 4방향 이미지 추론은 아직 완료되지 않았습니다. 원래 Stable Diffusion 2.1 주소가 404를 반환해 별도의 [커뮤니티 미러](https://huggingface.co/sd2-community/stable-diffusion-2-1)로 설정을 바꿨습니다. RTX 4050 Laptop GPU(6GB)에서 40단계 추론은 첫 단계에 약 74초가 걸려 중단했으며, 실제 완료 시간과 결과 품질은 미검증입니다. 3D 단계는 `nvdiffrast`가 없어 현재 환경에서 실행할 수 없습니다. 자세한 설치·검증 상태는 `CharacterGen/LOCAL_SETUP_STATUS.md`에 적었습니다.
+
+테스트할 PNG는 `CharacterGen/test_inputs/`에 넣고 노트북의 입력 파일명을 바꿉니다. 노트북의 `2. 4방향 이미지 생성` 아래 저장 셀까지만 실행하면 PNG가 `CharacterGen/mv_res/notebook_test/<입력 파일명>/`에 저장됩니다. 로컬 입력 이미지, `venv/`, 가중치, 생성 결과는 Git에서 제외됩니다.
+
+CharacterGen README의 자동 리깅 언급은 별도 프로젝트인 [UniRig](https://github.com/VAST-AI-Research/UniRig)의 소개입니다. CharacterGen 자체가 뼈대를 붙인 모델을 출력하는 것은 아닙니다.
