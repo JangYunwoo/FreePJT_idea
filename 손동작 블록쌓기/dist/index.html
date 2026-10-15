@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101727" />
+    <meta name="description" content="카메라로 블록을 쌓고 개인전 또는 최대 6명 방 코드 경쟁전을 즐기는 웹 게임" />
+    <title>PINCH TOWER — 손으로 쌓는 블록 게임</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+    <script defer src="./config.js"></script>
+    <script defer type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a id="home-link" class="brand" href="./" aria-label="PINCH TOWER 모드 선택으로 이동"><span class="brand-mark">P<span class="brand-dot">.</span></span><span>PINCH TOWER</span></a>
+        <div class="topbar-right"><span class="live-dot"></span> CAMERA-POWERED ARCADE <span class="topbar-separator">/</span> 01</div>
+      </header>
+
+      <main>
+        <section id="mode-screen" class="mode-screen" aria-label="게임 모드 선택">
+          <p class="eyebrow"><span class="eyebrow-line"></span> 모드를 선택하세요</p>
+          <h1>혼자 쌓을까<span class="title-comma">,</span><br /><em>함께 겨룰까?</em></h1>
+          <div class="mode-options">
+            <button id="solo-mode-button" class="mode-option" type="button"><span class="mode-option-index">01 / SOLO</span><strong>개인전</strong><span>내 페이스로 12개 블록을 쌓아 보세요.</span><b aria-hidden="true">↗</b></button>
+            <button id="versus-mode-button" class="mode-option" type="button"><span class="mode-option-index">02 / VERSUS</span><strong>경쟁전</strong><span>방 코드로 모여 최대 6명이 함께 겨룹니다.</span><b aria-hidden="true">↗</b></button>
+          </div>
+        </section>
+
+        <section id="setup-screen" class="setup-screen" aria-label="게임 시작 전 조작 설정" hidden>
+          <button id="setup-back-button" class="text-button" type="button">← 돌아가기</button>
+          <p class="section-index">BEFORE YOU PLAY</p>
+          <h1>조작 방법을 선택하세요.</h1>
+          <p class="setup-lead">카메라로 손을 인식하거나 마우스로 테스트할 수 있습니다. 아래에서 블록 하나를 움직여본 뒤 시작하세요.</p>
+          <div id="setup-controls"></div>
+          <button id="setup-primary-button" class="primary-button" type="button">게임 시작 <span>↗</span></button>
+        </section>
+
+        <section id="competition-screen" class="competition-screen" aria-label="경쟁전 방" hidden>
+          <button id="competition-back-button" class="text-button" type="button">← 모드 선택</button>
+          <div id="competition-entry" class="competition-panel">
+            <p class="section-index">02 / VERSUS</p>
+            <h1>같은 방에서, 각자의 탑을.</h1>
+            <p>방 코드를 공유해 2~6명이 참가합니다. 방장이 시작하면 동시에 쌓기를 시작합니다.</p>
+            <label for="player-name">플레이어 이름</label>
+            <input id="player-name" maxlength="16" autocomplete="nickname" placeholder="이름을 입력하세요" />
+            <div class="room-actions">
+              <button id="create-room-button" class="primary-button" type="button">새 방 만들기 <span>↗</span></button>
+              <div class="join-room"><input id="room-code-input" maxlength="6" autocomplete="off" placeholder="방 코드 6자리" aria-label="방 코드" /><button id="join-room-button" class="secondary-button" type="button">참가하기</button></div>
+            </div>
+          </div>
+          <div id="competition-lobby" class="competition-panel" hidden>
+            <p class="section-index">WAITING ROOM</p>
+            <h1>방 코드 <span id="lobby-code"></span></h1>
+            <button id="copy-room-button" class="secondary-button" type="button">초대 링크 복사</button>
+            <p id="lobby-count"></p>
+            <div id="lobby-players" class="lobby-players"></div>
+            <div class="lobby-actions">
+              <button id="lobby-camera-button" class="secondary-button" type="button">카메라 설정</button>
+              <button id="ready-button" class="secondary-button" type="button">준비 완료</button>
+              <button id="start-room-button" class="primary-button" type="button">경쟁전 시작 <span>↗</span></button>
+            </div>
+            <p id="lobby-hint">모두 준비 완료를 누르면 방장이 시작할 수 있습니다.</p>
+          </div>
+          <p id="competition-error" class="competition-error" role="alert"></p>
+        </section>
+
+        <div id="game-view" hidden>
+        <section class="game-card" aria-label="블록 쌓기 게임">
+          <div class="game-toolbar">
+            <div class="game-toolbar-left"><span class="status-pulse"></span><span id="input-status">마우스 테스트 모드</span><span class="toolbar-divider"></span><span id="game-message">오른쪽 블록을 집어보세요</span></div>
+            <div class="game-toolbar-right"><span id="room-status" class="round-label">ROUND 01</span><button id="exit-mode-button" class="text-button" type="button">모드 선택</button><button id="reset-button" class="icon-button" type="button" title="다시 시작" aria-label="다시 시작">↻</button></div>
+          </div>
+
+          <div class="stage-wrap">
+            <aside id="opponent-sidebar" class="opponent-sidebar" aria-label="상대 플레이어 화면" hidden><div class="opponent-sidebar-heading">OPPONENTS <span id="opponent-count">0 / 5</span></div><div id="opponent-list" class="opponent-list"></div></aside>
+            <canvas id="game-canvas" width="980" height="640" aria-label="왼쪽은 블록 쌓는 공간, 오른쪽은 블록 대기 칸"></canvas>
+            <div id="result-overlay" class="result-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="result-title">
+              <div class="result-card">
+                <p class="result-kicker">CHALLENGE COMPLETE</p>
+                <h2 id="result-title">멋진 탑이에요!</h2>
+                <p id="result-detail">12개의 블록을 모두 놓았습니다.</p>
+                <button id="play-again-button" class="primary-button" type="button">다시 쌓기 <span>↗</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-footer">
+            <div class="metric"><span>PLACED</span><strong><span id="placed-count">00</span><small> / 12</small></strong></div>
+            <div class="metric"><span>HEIGHT</span><strong><span id="height-count">0</span><small> px</small></strong></div>
+            <div class="game-footer-note">PINCH TO PICK UP <span>·</span> A/D TO ROTATE <span>·</span> RELEASE TO DROP</div>
+          </div>
+        </section>
+
+        <section class="control-grid">
+          <div class="practice-panel">
+            <div class="practice-panel-heading"><strong>01 / 조작 테스트</strong><button id="practice-reset-button" class="text-button" type="button">가운데로 ↻</button></div>
+            <p id="practice-input-status" class="practice-input-status">마우스로 테스트 중</p>
+            <canvas id="practice-canvas" width="980" height="640" aria-label="가운데 2×2 블록을 움직여보는 조작 테스트"></canvas>
+            <p id="practice-help" class="practice-help">가운데 2×2 블록을 집어 움직여보세요. 놓으면 그 자리에 머뭅니다.</p>
+          </div>
+
+          <div class="camera-panel">
+            <div class="camera-panel-header"><span class="section-index">02 / HAND TRACKING</span><span id="camera-indicator" class="camera-indicator">OFFLINE</span></div>
+            <div class="camera-preview">
+              <video id="camera-video" autoplay muted playsinline></video>
+              <canvas id="hand-canvas"></canvas>
+              <div id="camera-placeholder" class="camera-placeholder"><span class="camera-icon">◉</span><strong>YOUR CAMERA GOES HERE</strong><small>영상은 게임 조작에 사용됩니다.</small></div>
+              <span class="camera-corner camera-corner-tl"></span><span class="camera-corner camera-corner-tr"></span><span class="camera-corner camera-corner-bl"></span><span class="camera-corner camera-corner-br"></span>
+            </div>
+            <div class="camera-legend"><span><i class="legend-pinching"></i> 집는 중</span><span><i class="legend-open"></i> 손 펼침</span><span>실시간 손 위치 추적</span></div>
+          </div>
+
+          <div class="instruction-panel">
+            <div class="section-heading"><span class="section-index">03 / CONTROLS</span><h2>조작 방식 선택</h2></div>
+            <ol class="steps">
+              <li><span class="step-num">01</span><span>카메라를 켜고 손이 화면에 보이게 하세요.</span></li>
+              <li><span class="step-num">02</span><span>오른쪽 블록 위에서 엄지와 검지를 붙여 집으세요.</span></li>
+              <li><span class="step-num">03</span><span>왼쪽에서 위치를 정하고, 잡은 동안 A/D로 90도씩 회전한 뒤 손가락을 벌려 놓으세요.</span></li>
+            </ol>
+            <div class="action-row">
+              <button id="camera-button" class="primary-button" type="button">카메라 켜기 <svg id="camera-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h4l1.5-2h5L16 7h4v12H4z" /><circle cx="12" cy="13" r="3" /></svg><svg id="mouse-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><rect x="7" y="2.5" width="10" height="19" rx="5" /><path d="M12 3v7" /></svg></button>
+            </div>
+            <p id="test-mode-status" class="test-mode-status" role="status"><strong id="test-mode-name">마우스</strong>로 테스트 중입니다.</p>
+            <p id="camera-help" class="camera-help" role="status">위 조작 테스트에서 블록을 집어볼 수 있습니다.</p>
+          </div>
+        </section>
+        </div>
+      </main>
+      <footer class="site-footer"><span>PINCH TOWER / PROTOTYPE</span><span>MediaPipe Hand Landmarker × Matter.js</span></footer>
+    </div>
+  </body>
+</html>

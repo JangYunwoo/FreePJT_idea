@@ -17,6 +17,8 @@ htmlcov/
 # Build artifacts
 build/
 dist/
+!손동작 블록쌓기/dist/
+!손동작 블록쌓기/dist/**
 *.egg-info/
 
 # Local configuration and credentials
